@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álgebra lineal — Negocios Internacionales</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#F8FAFC;--bg3:#F1F5F9;--text:#0F172A;--muted:#64748B;--border:#E2E8F0;--border2:#CBD5E1;
+  --blue:#1D4ED8;--blue-bg:#EFF6FF;--blue-b:#BFDBFE;--blue-d:#1E3A8A;
+  --green:#15803D;--green-bg:#F0FDF4;--green-b:#BBF7D0;--green-d:#14532D;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-b:#FECACA;--red-d:#7F1D1D;
+  --yellow:#B45309;--yellow-bg:#FFFBEB;--yellow-b:#FDE68A;
+  --mono:'Courier New',monospace;--sans:'Segoe UI',system-ui,sans-serif;
+  --r:10px;--r2:14px;
+}
+body{font-family:var(--sans);background:var(--bg3);color:var(--text);min-height:100vh;padding:0 0 4rem}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:.65rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left h1{font-size:13px;font-weight:600;color:var(--text)}
+.topbar-left p{font-size:11px;color:var(--muted);margin-top:2px}
+.topbar-right{text-align:right}
+.topbar-right p{font-size:11px;color:var(--muted)}
+.topbar-right span{font-size:12px;font-weight:600;color:var(--blue)}
+.pbar{height:3px;background:var(--blue-bg)}
+.pfill{height:100%;background:var(--blue);transition:width .4s;width:10%}
+.nav-pills{display:flex;gap:4px;padding:.85rem 1.5rem .4rem;flex-wrap:wrap;max-width:960px;margin:0 auto}
+.pill{font-size:10px;font-weight:600;padding:4px 9px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .15s}
+.pill:hover{background:var(--bg2)}
+.pill.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.pill.done{background:var(--green-bg);border-color:var(--green-b);color:var(--green)}
+.sec{display:none;max-width:960px;margin:0 auto;padding:0 1.5rem 2.5rem;animation:fi .18s ease}
+.sec.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;padding-top:1.25rem}
+.stitle{font-size:22px;font-weight:700;margin-bottom:.25rem;color:var(--text)}
+.sdesc{font-size:13px;color:var(--muted);margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);line-height:1.6}
+.box{border-radius:var(--r2);padding:.95rem 1.1rem;border:1px solid;margin-bottom:.65rem}
+.bl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.45rem}
+.box p,.box li{font-size:13px;line-height:1.75;color:var(--text)}
+.box ul,.box ol{padding-left:1.3rem}
+.box li{margin-bottom:.25rem}
+.bi{background:var(--blue-bg);border-color:var(--blue-b)}.bi .bl{color:var(--blue)}
+.bk{background:var(--bg2);border-color:var(--border)}.bk .bl{color:var(--muted)}
+.bw{background:var(--yellow-bg);border-color:var(--yellow-b)}.bw .bl{color:var(--yellow)}
+.be{background:var(--red-bg);border-color:var(--red-b)}.be .bl{color:var(--red)}
+.bs{background:var(--green-bg);border-color:var(--green-b)}.bs .bl{color:var(--green)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.mx{display:inline-flex;align-items:center;vertical-align:middle;margin:.25rem .35rem}
+.mx-body{display:grid;text-align:right;font-family:var(--mono);font-size:13px;color:var(--text);gap:8px 22px;padding:10px 8px}
+.mx-l,.mx-r{width:10px;flex-shrink:0;border:2px solid var(--muted)}
+.mx-l{border-right:none;border-radius:4px 0 0 4px}
+.mx-r{border-left:none;border-radius:0 4px 4px 0}
+.aug-sep{width:1.5px;background:var(--border2);align-self:stretch;margin:8px 4px}
+.mx-sol{color:var(--blue);font-weight:600}
+.op-row{display:flex;align-items:center;gap:.5rem;margin:.45rem 0;flex-wrap:wrap}
+.op-lbl{font-size:12px;color:var(--blue);font-family:var(--mono);background:var(--blue-bg);border:1px solid var(--blue-b);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.formula{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.6rem .95rem;margin:.4rem 0;font-size:13px;color:var(--blue-d);line-height:1.9;display:block}
+.app-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:1rem;margin-bottom:.65rem}
+.app-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:.3rem}
+.app-title{font-size:14px;font-weight:600;margin-bottom:.35rem;color:var(--text)}
+.app-body{font-size:13px;color:var(--muted);line-height:1.65}
+.eg-box{background:var(--bg2);padding:.75rem .95rem;margin:.45rem 0;font-size:13px;border-left:3px solid var(--blue-b);border-radius:0 var(--r) var(--r) 0;line-height:1.85;color:var(--text)}
+.step-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:.45rem}
+.sn{width:24px;height:24px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-right:.45rem;vertical-align:middle}
+.nota{margin-top:.6rem;background:var(--bg);border:1px solid var(--blue-b);border-radius:var(--r);padding:.65rem .85rem;font-size:12px;color:var(--blue-d);line-height:1.7}
+.rvl{font-family:var(--sans);font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(--r);border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--muted);transition:all .15s;margin-top:.5rem;display:inline-block}
+.rvl:hover{background:var(--bg2);color:var(--text)}
+.btn{font-family:var(--sans);font-size:13px;font-weight:600;padding:7px 16px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg);cursor:pointer;color:var(--text);transition:all .15s}
+.btn:hover{background:var(--bg2)}
+.btn-p{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-p:hover{background:var(--blue-d)}
+.btn-g{color:var(--muted);border-color:transparent;background:transparent}
+.btn-g:hover{background:var(--bg2);border-color:var(--border);color:var(--text)}
+.nav-btns{display:flex;justify-content:space-between;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border)}
+.qopt{width:100%;display:flex;align-items:flex-start;gap:.6rem;padding:.65rem .85rem;border-radius:var(--r);border:1px solid var(--border);cursor:pointer;transition:all .15s;background:var(--bg);font-size:13px;color:var(--text);text-align:left;margin-bottom:.35rem;font-family:var(--sans)}
+.qopt:hover{background:var(--bg2);border-color:var(--border2)}
+.qopt.sel{border-color:var(--blue);background:var(--blue-bg);color:var(--blue-d)}
+.qopt.ok{border-color:var(--green);background:var(--green-bg);color:var(--green-d);pointer-events:none}
+.qopt.bad{border-color:var(--red);background:var(--red-bg);color:var(--red-d);pointer-events:none}
+.qltr{width:20px;height:20px;border-radius:50%;background:var(--bg3);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.qfb{font-size:12px;margin-top:.5rem;padding:.6rem .85rem;border-radius:var(--r);display:none;line-height:1.6}
+.qfb.show{display:block}
+.qfb.ok{background:var(--green-bg);color:var(--green-d);border:1px solid var(--green-b)}
+.qfb.bad{background:var(--red-bg);color:var(--red-d);border:1px solid var(--red-b)}
+.score-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:2.5rem;text-align:center;margin-top:1rem;display:none}
+.score-card.show{display:block}
+.score-num{font-size:52px;font-weight:700;color:var(--blue)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem}
+.stat{background:var(--bg2);border-radius:var(--r);padding:.65rem;text-align:center}
+.stat-n{font-size:22px;font-weight:700;color:var(--blue)}
+.stat-l{font-size:11px;color:var(--muted);margin-top:2px}
+hr{border:none;border-top:1px solid var(--border);margin:1rem 0}
+.parcial-header{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:1.1rem;margin-bottom:1rem;text-align:center}
+.parcial-titulo{font-size:16px;font-weight:700;color:var(--text);margin-bottom:.2rem}
+.parcial-sub{font-size:12px;color:var(--muted)}
+.pregunta{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:1rem;overflow:hidden}
+.preg-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:.75rem}
+.preg-num{min-width:32px;height:32px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.preg-titulo{font-size:13px;font-weight:600;color:var(--text)}
+.preg-pts{font-size:11px;color:var(--muted);margin-left:auto}
+.preg-body{padding:.85rem 1rem}
+.preg-enun{font-size:13px;color:var(--text);line-height:1.75;margin-bottom:.65rem}
+.parte{font-size:13px;color:var(--text);line-height:1.65;padding:.5rem .75rem;background:var(--bg2);border-radius:var(--r);border-left:3px solid var(--blue-b);margin-bottom:.4rem}
+.sol-btn{font-family:var(--sans);font-size:12px;font-weight:600;padding:5px 13px;border-radius:var(--r);border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--muted);transition:all .15s;margin-top:.5rem}
+.sol-btn:hover{background:var(--bg2)}
+.sol-body{display:none;margin-top:.75rem;border-top:1px solid var(--border);padding-top:.75rem}
+.sol-body.show{display:block}
+.sol-tag{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem}
+.sol-parte{margin-bottom:.65rem}
+.sol-lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}.nav-pills,.sec{padding-left:1rem;padding-right:1rem}.topbar-right{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>&#193;lgebra lineal &mdash; Matrices y sistemas</h1>
+    <p>Matem&#225;ticas II &nbsp;&middot;&nbsp; Negocios Internacionales</p>
+  </div>
+  <div class="topbar-right">
+    <p>Docente</p>
+    <span>Eder Santiago Martelo Gomez</span>
+  </div>
+</div>
+<div class="pbar"><div class="pfill" id="prog"></div></div>
+<div class="nav-pills" id="nav"></div>
+<div id="secs"></div>
+
+<script>
+function mx(rows, aug){
+  const H=rows.length, W=rows[0].length;
+  const cols=aug||W;
+  const cellH=H*24+(H-1)*8+20;
+  let html='<div class="mx">';
+  html+=`<div class="mx-l" style="height:${cellH}px"></div>`;
+  html+=`<div class="mx-body" style="grid-template-columns:repeat(${cols},max-content)">`;
+  rows.forEach(row=>row.slice(0,cols).forEach(cell=>{html+=`<span>${cell}</span>`;}));
+  html+='</div>';
+  if(aug){
+    html+='<div class="aug-sep"></div>';
+    html+=`<div class="mx-body" style="grid-template-columns:max-content">`;
+    rows.forEach(row=>{const cell=row[aug]!==undefined?row[aug]:'?';html+=`<span class="mx-sol">${cell}</span>`;});
+    html+='</div>';
+  }
+  html+=`<div class="mx-r" style="height:${cellH}px"></div></div>`;
+  return html;
+}
+
+const SECS=[
+  {id:'s0',label:'1. ¿Qué es una matriz?'},
+  {id:'s1',label:'2. Tipos de matrices'},
+  {id:'s2',label:'3. Operaciones'},
+  {id:'s3',label:'4. Determinantes e inversa'},
+  {id:'s4',label:'5. Matriz aumentada'},
+  {id:'s5',label:'6. Gauss'},
+  {id:'s6',label:'7. Gauss-Jordan'},
+  {id:'s7',label:'8. Actividades'},
+  {id:'s8',label:'9. Quiz'},
+  {id:'s9',label:'10. Simulacro'},
+];
+let cur=0;
+const nav=document.getElementById('nav');
+const secsEl=document.getElementById('secs');
+SECS.forEach((s,i)=>{
+  const p=document.createElement('button');
+  p.className='pill'+(i===0?' on':'');p.textContent=s.label;p.onclick=()=>goSec(i);nav.appendChild(p);
+  const d=document.createElement('div');
+  d.id=s.id;d.className='sec'+(i===0?' on':'');
+  d.innerHTML=`<div id="${s.id}-body"></div>`;
+  secsEl.appendChild(d);
+});
+function goSec(n){
+  document.getElementById(SECS[cur].id).classList.remove('on');
+  nav.children[cur].classList.remove('on');
+  cur=n;
+  document.getElementById(SECS[cur].id).classList.add('on');
+  nav.children[cur].classList.add('on');
+  document.getElementById('prog').style.width=((cur+1)/SECS.length*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function nb(n){
+  return `<div class="nav-btns">${n>0?`<button class="btn btn-g" onclick="goSec(${n-1})">&#8592; ${SECS[n-1].label}</button>`:'<span></span>'}<button class="btn btn-p" onclick="goSec(${Math.min(n+1,SECS.length-1)})">${n+1<SECS.length?'Siguiente: '+SECS[n+1].label+' &#8594;':'Completado'}</button></div>`;
+}
+
+/* ══ S0 ══ */
+document.getElementById('s0-body').innerHTML=`
+<div class="stag">Secci&#243;n 1</div><div class="stitle">&#191;Qu&#233; es una matriz?</div>
+<div class="sdesc">Una matriz es una tabla rectangular de n&#250;meros ordenados en filas y columnas. En negocios las usamos todo el tiempo sin darnos cuenta.</div>
+<div class="app-card">
+  <div class="app-tag">Contexto &mdash; Negocios internacionales</div>
+  <div class="app-title">Ventas de una empresa en tres pa&#237;ses</div>
+  <div class="app-body">Una empresa colombiana exporta caf&#233;, flores y textiles a M&#233;xico, Per&#250; y Chile. Las ventas mensuales (en miles de d&#243;lares) de cada producto en cada pa&#237;s forman naturalmente una tabla. Esa tabla <em>es</em> una matriz. Cuando un gerente abre Excel y organiza datos en filas y columnas, est&#225; trabajando con matrices.</div>
+</div>
+<div class="box bi">
+  <div class="bl">Definici&#243;n</div>
+  <p>Una matriz <strong>A</strong> de orden <strong>m &times; n</strong> es una tabla rectangular de <em>m</em> filas y <em>n</em> columnas. Cada elemento se denota a<sub>ij</sub>, donde <em>i</em> es la fila y <em>j</em> es la columna.</p>
+  <div class="formula">A = [a<sub>ij</sub>] &nbsp;&nbsp; con &nbsp; i = 1, 2, ..., m &nbsp; y &nbsp; j = 1, 2, ..., n</div>
+  <p style="font-size:12px;color:var(--muted);margin-top:.4rem">Se lee &ldquo;a sub i j&rdquo;. Primer sub&#237;ndice = <strong>fila</strong>, segundo = <strong>columna</strong>. Siempre en ese orden.</p>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Ejemplo &mdash; ventas por pa&#237;s y producto (miles USD)</p>
+<div class="eg-box">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; M&#233;xico &nbsp; Per&#250; &nbsp; Chile<br>
+  Caf&#233; &nbsp;&nbsp;&nbsp;&nbsp; ${mx([['120','85','95']])} <br>
+  Flores &nbsp;&nbsp;&nbsp; ${mx([['60','45','70']])} <br>
+  Textiles ${mx([['200','130','180']])} <br><br>
+  Escrito como una sola matriz de orden <strong>3 &times; 3</strong>:<br><br>
+  ${mx([['120','85','95'],['60','45','70'],['200','130','180']])}<br><br>
+  a<sub>12</sub> = 85 &nbsp;(ventas de caf&#233; en Per&#250;) &nbsp;&nbsp;&nbsp; a<sub>31</sub> = 200 &nbsp;(ventas de textiles en M&#233;xico)
+</div>
+<div class="box bw">
+  <div class="bl">Casos especiales de orden</div>
+  <p><strong>Vector fila (1&times;n):</strong> una sola fila &mdash; por ejemplo, los precios de un producto en n pa&#237;ses<br>
+  <strong>Vector columna (m&times;1):</strong> una sola columna &mdash; las ventas de m productos en un pa&#237;s<br>
+  <strong>Matriz cuadrada (n&times;n):</strong> mismo n&#250;mero de filas y columnas</p>
+</div>
+<div class="box bk">
+  <div class="bl">Notaci&#243;n</div>
+  <p>Las matrices se escriben con letras <strong>may&#250;sculas</strong>: <strong>A</strong>, <strong>B</strong>, <strong>C</strong>.<br>
+  Sus elementos con min&#250;sculas y sub&#237;ndices: a<sub>ij</sub>.<br>
+  El orden se escribe m&times;n (ambas min&#250;sculas), se lee &ldquo;m por n&rdquo;.</p>
+</div>
+${nb(0)}`;
+
+/* ══ S1 ══ */
+document.getElementById('s1-body').innerHTML=`
+<div class="stag">Secci&#243;n 2</div><div class="stitle">Tipos de matrices</div>
+<div class="sdesc">Hay matrices con formas especiales que aparecen con frecuencia en modelos de negocios. Reconocerlas ahorra tiempo y evita errores.</div>
+<div class="g2">
+  <div class="box bi" style="margin-bottom:0">
+    <div class="bl">Matriz cuadrada (n&times;n)</div>
+    <p>Mismo n&#250;mero de filas y columnas. Por ejemplo, una tabla de intercambio comercial entre 3 pa&#237;ses.</p>
+    ${mx([['120','85'],['60','45']])}
+  </div>
+  <div class="box bi" style="margin-bottom:0">
+    <div class="bl">Matriz identidad I<sub>n</sub></div>
+    <p>Unos en la diagonal, ceros en el resto. Se llama &ldquo;identidad&rdquo; porque multiplicar cualquier matriz <strong>A</strong> por ella no la cambia: <strong>A &middot; I = I &middot; A = A</strong>. Es el equivalente matricial de multiplicar por 1.</p>
+    ${mx([['1','0','0'],['0','1','0'],['0','0','1']])}
+  </div>
+  <div class="box bk" style="margin-bottom:0">
+    <div class="bl">Matriz nula O</div>
+    <p>Todos sus elementos son cero. Sumarle O a cualquier matriz no la cambia. Representa &ldquo;sin ventas&rdquo; o &ldquo;sin costos&rdquo;.</p>
+    ${mx([['0','0'],['0','0']])}
+  </div>
+  <div class="box bk" style="margin-bottom:0">
+    <div class="bl">Matriz diagonal</div>
+    <p>Solo tiene valores en la diagonal principal. Aparece en modelos donde cada variable solo depende de s&#237; misma.</p>
+    ${mx([['3','0','0'],['0','5','0'],['0','0','2']])}
+  </div>
+  <div class="box bs" style="margin-bottom:0">
+    <div class="bl">Triangular superior</div>
+    <p>Ceros debajo de la diagonal. Aparece al aplicar el m&#233;todo de Gauss.</p>
+    ${mx([['2','3','1'],['0','4','5'],['0','0','6']])}
+  </div>
+  <div class="box bs" style="margin-bottom:0">
+    <div class="bl">Triangular inferior</div>
+    <p>Ceros encima de la diagonal.</p>
+    ${mx([['2','0','0'],['3','4','0'],['1','5','6']])}
+  </div>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Transpuesta y matriz sim&#233;trica</p>
+<div class="box bi">
+  <div class="bl">Transpuesta (A<sup>T</sup>)</div>
+  <p>Se obtiene intercambiando filas por columnas. Si A tiene orden m&times;n, entonces A<sup>T</sup> tiene orden n&times;m.</p>
+  <div class="eg-box" style="margin-top:.5rem">
+    <strong>Ejemplo de negocio:</strong> la matriz de ventas (productos &times; pa&#237;ses) transpuesta da (pa&#237;ses &times; productos) &mdash; cambia la perspectiva del an&#225;lisis.<br><br>
+    <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+      <span style="font-size:13px">A =</span>${mx([['120','85','95'],['60','45','70']])}
+      <span style="font-size:18px;color:var(--muted)">&rarr;</span>
+      <span style="font-size:13px">A<sup>T</sup> =</span>${mx([['120','60'],['85','45'],['95','70']])}
+    </div>
+  </div>
+</div>
+<div class="box bw">
+  <div class="bl">Matriz sim&#233;trica</div>
+  <p>Cuando A = A<sup>T</sup>, es decir a<sub>ij</sub> = a<sub>ji</sub>. Solo puede ser cuadrada.</p>
+  ${mx([['0','150','200'],['150','0','120'],['200','120','0']])}
+  <p style="font-size:12px;margin-top:.4rem">Ejemplo cl&#225;sico: tabla de distancias entre ciudades o tabla de aranceles rec&#237;procos entre pa&#237;ses. La distancia de Bogot&#225; a Lima es la misma que de Lima a Bogot&#225;.</p>
+</div>
+${nb(1)}`;
+
+/* ══ S2 ══ */
+document.getElementById('s2-body').innerHTML=`
+<div class="stag">Secci&#243;n 3</div><div class="stitle">Operaciones con matrices</div>
+<div class="sdesc">Sumar ventas de dos periodos, ajustar precios por tasa de cambio, calcular ingresos totales. Estas operaciones cotidianas de negocios son exactamente las operaciones matriciales.</div>
+<div class="app-card">
+  <div class="app-tag">Contexto &mdash; Empresa exportadora</div>
+  <div class="app-title">Consolidar resultados de dos trimestres</div>
+  <div class="app-body">Una empresa tiene las ventas del primer trimestre y del segundo. Para obtener el acumulado semestral, simplemente se suman las dos matrices. Para proyectar el pr&#243;ximo semestre con un crecimiento del 10%, se multiplica por 1.1. Eso es todo &mdash; operaciones matriciales en la pr&#225;ctica.</div>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Suma y resta</p>
+<div class="box bi">
+  <div class="bl">Condici&#243;n y regla</div>
+  <p>Solo se pueden sumar o restar matrices del <strong>mismo orden</strong>. Se suma elemento a elemento: el producto i en el pa&#237;s j del primer trimestre m&#225;s el mismo producto en el mismo pa&#237;s del segundo trimestre.</p>
+  <div class="formula">(A + B)<sub>ij</sub> = a<sub>ij</sub> + b<sub>ij</sub></div>
+</div>
+<div class="eg-box">
+  <strong>Ventas Q1 + Ventas Q2 = Acumulado semestral (miles USD):</strong><br><br>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+    ${mx([['120','85'],['60','45']])}
+    <span style="font-size:18px;color:var(--muted)">+</span>
+    ${mx([['135','90'],['70','50']])}
+    <span style="font-size:18px;color:var(--muted)">=</span>
+    ${mx([['255','175'],['130','95']])}
+  </div>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Multiplicaci&#243;n por escalar</p>
+<div class="box bk">
+  <div class="bl">Regla</div>
+  <p>Multiplicar una matriz por un n&#250;mero k multiplica <strong>cada elemento</strong> por ese n&#250;mero. En negocios: ajustar todos los precios por la misma tasa de cambio o proyectar un crecimiento uniforme.</p>
+  <div class="formula">(k &middot; A)<sub>ij</sub> = k &middot; a<sub>ij</sub></div>
+</div>
+<div class="eg-box">
+  <strong>Proyecci&#243;n con crecimiento del 10% (k = 1.1):</strong><br><br>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+    <span style="font-size:14px">1.1 &middot;</span>
+    ${mx([['255','175'],['130','95']])}
+    <span style="font-size:18px;color:var(--muted)">=</span>
+    ${mx([['280.5','192.5'],['143','104.5']])}
+  </div><br>
+  <strong>Conversi&#243;n de d&#243;lares a euros (k = 0.92):</strong><br><br>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+    <span style="font-size:14px">0.92 &middot;</span>
+    ${mx([['120','85'],['60','45']])}
+    <span style="font-size:18px;color:var(--muted)">=</span>
+    ${mx([['110.4','78.2'],['55.2','41.4']])}
+  </div>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Multiplicaci&#243;n de matrices</p>
+<div class="box bi">
+  <div class="bl">Condici&#243;n y regla</div>
+  <p>Para multiplicar <strong>A &middot; B</strong>, las <strong>columnas de A</strong> deben ser igual a las <strong>filas de B</strong>.<br>
+  Si A es m&times;k y B es k&times;n &rarr; el resultado C = A&middot;B es de orden m&times;n.</p>
+  <div class="formula">c<sub>ij</sub> = &sum; a<sub>ik</sub> &middot; b<sub>kj</sub> &nbsp;&nbsp; (fila i de A &middot; columna j de B)</div>
+</div>
+<div class="app-card">
+  <div class="app-tag">Aplicaci&#243;n directa</div>
+  <div class="app-title">Calcular ingresos totales por pa&#237;s</div>
+  <div class="app-body">Si <strong>A</strong> es la matriz de unidades vendidas (productos &times; pa&#237;ses) y <strong>p</strong> es el vector de precios (precio por producto), entonces <strong>A<sup>T</sup> &middot; p</strong> da directamente el ingreso total de cada pa&#237;s. La multiplicaci&#243;n matricial automatiza lo que de otra forma ser&#237;an docenas de c&#225;lculos individuales.</div>
+</div>
+<div class="eg-box">
+  <strong>Ejemplo 2&times;2:</strong><br><br>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.65rem">
+    <span style="font-size:13px">A =</span>${mx([['2','1'],['3','4']])}
+    <span style="font-size:13px">&nbsp; B =</span>${mx([['5','6'],['7','8']])}
+  </div>
+  c<sub>11</sub> = 2&middot;5 + 1&middot;7 = 17 &nbsp;&nbsp; c<sub>12</sub> = 2&middot;6 + 1&middot;8 = 20<br>
+  c<sub>21</sub> = 3&middot;5 + 4&middot;7 = 43 &nbsp;&nbsp; c<sub>22</sub> = 3&middot;6 + 4&middot;8 = 50<br><br>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+    <span style="font-size:13px">A &middot; B =</span>${mx([['17','20'],['43','50']])}
+  </div>
+</div>
+<div class="box be">
+  <div class="bl">Propiedad importante &mdash; el orden importa</div>
+  <p>En general, <strong>A &middot; B &ne; B &middot; A</strong>. En negocios esto significa que &ldquo;precio &times; cantidad&rdquo; no es lo mismo que &ldquo;cantidad &times; precio&rdquo; cuando son matrices &mdash; el orden de las operaciones cambia el resultado.</p>
+</div>
+${nb(2)}`;
+
+/* ══ S3 ══ */
+document.getElementById('s3-body').innerHTML=`
+<div class="stag">Secci&#243;n 4</div><div class="stitle">Determinantes y matriz inversa</div>
+<div class="sdesc">El determinante es un n&#250;mero que le dice al analista si un modelo de negocios tiene una soluci&#243;n &#250;nica o si hay alg&#250;n problema de dependencia entre las variables.</div>
+<div class="box bi">
+  <div class="bl">&#191;Para qu&#233; sirve el determinante en negocios?</div>
+  <ul>
+    <li>Si det(A) &ne; 0: el sistema tiene <strong>soluci&#243;n &#250;nica</strong> y existe la matriz inversa</li>
+    <li>Si det(A) = 0: las ecuaciones son <strong>dependientes entre s&#237;</strong> &mdash; el modelo tiene un problema de dise&#241;o y no hay soluci&#243;n &#250;nica</li>
+    <li>En modelos financieros, det = 0 generalmente indica que dos variables del modelo son redundantes</li>
+  </ul>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Determinante 2&times;2</p>
+<div class="box bk">
+  <div class="bl">Regla directa</div>
+  <p>Para la matriz:</p>
+  <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin:.5rem 0">
+    <span style="font-size:13px">A =</span>${mx([['a','b'],['c','d']])}
+  </div>
+  <div class="formula">det(A) = |A| = a&middot;d &minus; b&middot;c &nbsp;&nbsp; (diagonal principal &minus; diagonal secundaria)</div>
+</div>
+<div class="eg-box">
+  <strong>Ejemplo:</strong> Modelo de dos productos con dos restricciones de recursos<br>
+  <div style="display:flex;align-items:center;gap:.5rem;margin:.4rem 0;flex-wrap:wrap">
+    <span style="font-size:13px">A =</span>${mx([['4','2'],['1','3']])}
+  </div>
+  det(A) = 4&middot;3 &minus; 2&middot;1 = 12 &minus; 2 = <strong>10</strong><br>
+  Como det(A) = 10 &ne; 0 &rarr; el modelo tiene <strong>soluci&#243;n &#250;nica</strong>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Determinante 3&times;3 &mdash; Regla de Sarrus</p>
+<div class="box bi">
+  <div class="bl">M&#233;todo</div>
+  <p>Se repiten las dos primeras columnas a la derecha y se calculan las seis diagonales:</p>
+  <div class="formula" style="font-size:12px">
+    Diagonales principales (+): a<sub>11</sub>a<sub>22</sub>a<sub>33</sub> + a<sub>12</sub>a<sub>23</sub>a<sub>31</sub> + a<sub>13</sub>a<sub>21</sub>a<sub>32</sub><br>
+    Diagonales secundarias (&minus;): a<sub>13</sub>a<sub>22</sub>a<sub>31</sub> + a<sub>11</sub>a<sub>23</sub>a<sub>32</sub> + a<sub>12</sub>a<sub>21</sub>a<sub>33</sub><br>
+    det = (suma principales) &minus; (suma secundarias)
+  </div>
+</div>
+<div class="eg-box">
+  <strong>Ejemplo &mdash; tres restricciones de presupuesto:</strong><br>
+  <div style="display:flex;align-items:center;gap:.5rem;margin:.4rem 0;flex-wrap:wrap">
+    <span style="font-size:13px">A =</span>${mx([['2','1','3'],['1','4','2'],['3','2','1']])}
+  </div>
+  Principales: 2&middot;4&middot;1 + 1&middot;2&middot;3 + 3&middot;1&middot;2 = 8 + 6 + 6 = 20<br>
+  Secundarias: 3&middot;4&middot;3 + 2&middot;2&middot;2 + 1&middot;1&middot;1 = 36 + 8 + 1 = 45<br>
+  det(A) = 20 &minus; 45 = <strong>&minus;25</strong> &nbsp;&rarr;&nbsp; det &ne; 0, soluci&#243;n &#250;nica existe
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Determinante por cofactores</p>
+<div class="box bk">
+  <div class="bl">Expansi&#243;n por fila o columna</div>
+  <div class="formula">det(A) = &sum;<sub>j</sub> a<sub>ij</sub> &middot; C<sub>ij</sub> &nbsp;&nbsp; donde &nbsp; C<sub>ij</sub> = (&minus;1)<sup>i+j</sup> &middot; M<sub>ij</sub></div>
+  <p style="font-size:12px;margin-top:.4rem">M<sub>ij</sub> es el determinante de la submatriz que queda al eliminar la fila i y la columna j. Siempre conviene expandir por la fila o columna con m&#225;s ceros.</p>
+</div>
+<div class="box bw">
+  <div class="bl">Tablero de signos de los cofactores</div>
+  ${mx([['+','&minus;','+'],[' &minus;','+','&minus;'],['+','&minus;','+']])}
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Matriz inversa A<sup>&minus;1</sup></p>
+<div class="box bi">
+  <div class="bl">Definici&#243;n e interpretaci&#243;n en negocios</div>
+  <p>La matriz inversa de <strong>A</strong> es la matriz <strong>A<sup>&minus;1</sup></strong> tal que:</p>
+  <div class="formula">A &middot; A<sup>&minus;1</sup> = A<sup>&minus;1</sup> &middot; A = I</div>
+  <p style="font-size:12px;color:var(--muted);margin-top:.4rem"><strong>Intuici&#243;n de negocios:</strong> si una transformaci&#243;n de precios (A) convierte precios originales en precios con impuestos, la matriz inversa (A<sup>&minus;1</sup>) hace exactamente lo opuesto: recupera los precios originales a partir de los precios con impuestos.<br><br>Solo existe si det(A) &ne; 0.</p>
+</div>
+<div class="g2">
+  <div class="box bs" style="margin-bottom:0">
+    <div class="bl">F&#243;rmula directa para 2&times;2</div>
+    <p>Si A = ${mx([['a','b'],['c','d']])}, entonces:</p>
+    <div class="formula" style="font-size:12px">A<sup>&minus;1</sup> = (1/det(A)) &middot; ${mx([['d','&minus;b'],['&minus;c','a']])}</div>
+    <p style="font-size:12px;margin-top:.35rem">Se intercambia la diagonal principal, se cambian los signos de la secundaria, y se divide todo por el determinante.</p>
+  </div>
+  <div class="box bk" style="margin-bottom:0">
+    <div class="bl">Inversa por Gauss-Jordan</div>
+    <p>Para matrices 3&times;3 o mayores: se construye (A | I) y se aplica Gauss-Jordan hasta obtener (I | A<sup>&minus;1</sup>).</p>
+    <div class="formula" style="font-size:12px">(A | I) &nbsp;&rarr;&nbsp; operaciones &nbsp;&rarr;&nbsp; (I | A<sup>&minus;1</sup>)</div>
+    <p style="font-size:12px;margin-top:.35rem">Si aparece una fila de ceros en el lado izquierdo, det = 0 y la inversa no existe.</p>
+  </div>
+</div>
+<div class="eg-box">
+  <strong>Ejemplo &mdash; recuperar precios originales:</strong><br>
+  Una empresa aplica un ajuste de precios modelado por A = ${mx([['4','2'],['1','3']])}.<br><br>
+  det(A) = 10 &rarr; existe A<sup>&minus;1</sup><br><br>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+    <span style="font-size:13px">A<sup>&minus;1</sup> = (1/10) &middot;</span>${mx([['3','&minus;2'],['-1','4']])}
+    <span style="font-size:18px;color:var(--muted)">=</span>
+    ${mx([['0.3','&minus;0.2'],['-0.1','0.4']])}
+  </div><br>
+  <strong>Verificaci&#243;n:</strong> A &middot; A<sup>&minus;1</sup> =
+  ${mx([['4','2'],['1','3']])}
+  &middot;
+  ${mx([['0.3','&minus;0.2'],['-0.1','0.4']])}
+  =
+  ${mx([['1','0'],['0','1']])}
+  &#10003;
+</div>
+${nb(3)}`;
+
+/* ══ S4 ══ */
+document.getElementById('s4-body').innerHTML=`
+<div class="stag">Secci&#243;n 5</div><div class="stitle">Sistemas de ecuaciones y matriz aumentada</div>
+<div class="sdesc">Muchas decisiones de negocios implican satisfacer varias condiciones al mismo tiempo. Eso es exactamente un sistema de ecuaciones. La matriz aumentada es la forma compacta de escribirlo para resolverlo eficientemente.</div>
+<div class="app-card">
+  <div class="app-tag">Contexto &mdash; Distribuci&#243;n de presupuesto</div>
+  <div class="app-title">Asignar recursos entre tres mercados</div>
+  <div class="app-body">Una empresa tiene un presupuesto de marketing para distribuir entre tres mercados (M&#233;xico, Per&#250;, Chile). Hay tres restricciones: el total disponible, la proporci&#243;n m&#237;nima para cada mercado, y una condici&#243;n de equilibrio regional. Esas tres restricciones forman un sistema de tres ecuaciones con tres inc&#243;gnitas.</div>
+</div>
+<div class="box bi">
+  <div class="bl">De sistema a matriz aumentada</div>
+  <p>Dado el sistema:</p>
+  <div class="formula">a<sub>11</sub>x + a<sub>12</sub>y + a<sub>13</sub>z = b<sub>1</sub><br>a<sub>21</sub>x + a<sub>22</sub>y + a<sub>23</sub>z = b<sub>2</sub><br>a<sub>31</sub>x + a<sub>32</sub>y + a<sub>33</sub>z = b<sub>3</sub></div>
+  <p style="margin-top:.5rem">La <strong>matriz aumentada</strong> (A|b) organiza toda la informaci&#243;n en una sola tabla:</p>
+  <div style="margin:.5rem 0">${mx([['a\u2081\u2081','a\u2081\u2082','a\u2081\u2083','b\u2081'],['a\u2082\u2081','a\u2082\u2082','a\u2082\u2083','b\u2082'],['a\u2083\u2081','a\u2083\u2082','a\u2083\u2083','b\u2083']],3)}</div>
+  <p style="font-size:12px;color:var(--muted);margin-top:.4rem">La l&#237;nea vertical separa los coeficientes (lado izquierdo) de los valores conocidos (lado derecho).</p>
+</div>
+<div class="eg-box">
+  <strong>Distribuci&#243;n de presupuesto (millones COP):</strong><br>
+  x + y + z = 300 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (total disponible)<br>
+  2x &minus; y = 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (M&#233;xico recibe el doble que Per&#250;)<br>
+  x + 2z = 200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (condici&#243;n regional)<br><br>
+  <strong>Matriz aumentada:</strong><br>
+  ${mx([['1','1','1','300'],['2','-1','0','0'],['1','0','2','200']],3)}
+</div>
+<div class="box bw">
+  <div class="bl">Operaciones elementales de fila</div>
+  <p>Estas tres operaciones reorganizan las ecuaciones sin cambiar las soluciones:</p>
+  <ul>
+    <li><strong>F<sub>i</sub> &harr; F<sub>j</sub> :</strong> intercambiar dos filas (reordenar ecuaciones)</li>
+    <li><strong>k &middot; F<sub>i</sub> :</strong> multiplicar una fila por k &ne; 0 (escalar una ecuaci&#243;n)</li>
+    <li><strong>F<sub>i</sub> &rarr; F<sub>i</sub> + k&middot;F<sub>j</sub> :</strong> combinar filas (eliminar una variable)</li>
+  </ul>
+</div>
+${nb(4)}`;
+
+/* ══ S5 ══ */
+document.getElementById('s5-body').innerHTML=`
+<div class="stag">Secci&#243;n 6</div><div class="stitle">M&#233;todo de Gauss</div>
+<div class="sdesc">Se aplican operaciones de fila para transformar la matriz aumentada en una forma triangular. Luego se despeja cada variable de atr&#225;s hacia adelante.</div>
+<div class="box bi">
+  <div class="bl">Objetivo: forma escalonada (triangular superior)</div>
+  <p>Se busca que debajo de la diagonal queden puros ceros. Eso permite resolver por sustituci&#243;n hacia atr&#225;s.</p>
+  <div style="margin:.5rem 0">${mx([['*','*','*','*'],['0','*','*','*'],['0','0','*','*']],3)}</div>
+  <p style="font-size:12px;color:var(--muted);margin-top:.35rem">* = cualquier valor. Los ceros se construyen con las operaciones elementales.</p>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Ejemplo &mdash; distribuci&#243;n de presupuesto paso a paso</p>
+<div class="eg-box">
+  <strong>Sistema:</strong> x + y + z = 300 &nbsp;&nbsp; 2x &minus; y = 0 &nbsp;&nbsp; x + 2z = 200<br><br>
+  <strong>Matriz aumentada:</strong><br>
+  ${mx([['1','1','1','300'],['2','-1','0','0'],['1','0','2','200']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; &minus; 2F&#8321;</span></div>
+  ${mx([['1','1','1','300'],['0','-3','-2','-600'],['1','0','2','200']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8323; &rarr; F&#8323; &minus; F&#8321;</span></div>
+  ${mx([['1','1','1','300'],['0','-3','-2','-600'],['0','-1','1','-100']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8323; &rarr; 3F&#8323; &minus; F&#8322;</span></div>
+  ${mx([['1','1','1','300'],['0','-3','-2','-600'],['0','0','5','100']],3)}<br>
+  <span style="font-size:12px;color:var(--green)">&#10003; Forma escalonada</span><br><br>
+
+  <strong>Sustituci&#243;n regresiva:</strong><br>
+  5z = 100 &rarr; <strong>z = 20</strong> &nbsp;(20 millones para Chile)<br>
+  &minus;3y &minus; 2(20) = &minus;600 &rarr; &minus;3y = &minus;560 &rarr; <strong>y = 186.7</strong> &nbsp;(Para Per&#250;)<br>
+  x + 186.7 + 20 = 300 &rarr; <strong>x = 93.3</strong> &nbsp;(Para M&#233;xico)
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Los tres tipos de soluci&#243;n &mdash; qu&#233; significan en negocios</p>
+<div class="g2">
+  <div class="box bs" style="margin-bottom:0">
+    <div class="bl">Soluci&#243;n &#250;nica</div>
+    <p>El modelo tiene exactamente una distribuci&#243;n posible que cumple todas las restricciones. det &ne; 0. Sistema <strong>compatible determinado</strong>.</p>
+    ${mx([['2','1','300'],['0','3','180'],['0','0','60']],3)}
+  </div>
+  <div class="box bw" style="margin-bottom:0">
+    <div class="bl">Infinitas soluciones</div>
+    <p>Hay m&#225;s de una distribuci&#243;n posible que cumple todas las restricciones. Una variable queda libre. Sistema <strong>compatible indeterminado</strong>.</p>
+    ${mx([['2','1','300'],['0','3','180'],['0','0','0']],3)}
+  </div>
+</div>
+<div class="box be" style="margin-top:.65rem">
+  <div class="bl">Sin soluci&#243;n &mdash; modelo inconsistente</div>
+  <p>Las restricciones son contradictorias entre s&#237;. No existe ninguna distribuci&#243;n que las cumpla todas. Sistema <strong>incompatible</strong>.</p>
+  ${mx([['2','1','300'],['0','3','180'],['0','0','50']],3)}
+  <p style="font-size:12px;margin-top:.4rem">La &#250;ltima fila dice 0x + 0y + 0z = 50, es decir 0 = 50 &rarr; imposible. Las restricciones del modelo son inconsistentes y deben revisarse.</p>
+</div>
+${nb(5)}`;
+
+/* ══ S6 ══ */
+document.getElementById('s6-body').innerHTML=`
+<div class="stag">Secci&#243;n 7</div><div class="stitle">M&#233;todo de Gauss-Jordan</div>
+<div class="sdesc">Contin&#250;a donde termin&#243; Gauss. Se sigue reduciendo hasta que la soluci&#243;n queda escrita directamente &mdash; sin necesidad de hacer sustituci&#243;n.</div>
+<div class="box bi">
+  <div class="bl">Diferencia con Gauss</div>
+  <p><strong>Gauss:</strong> llega a la forma triangular superior y resuelve sustituyendo hacia atr&#225;s.<br><br>
+  <strong>Gauss-Jordan:</strong> va m&#225;s lejos &mdash; reduce cada pivote a 1 y elimina tambi&#233;n los elementos <em>encima</em> del pivote. La soluci&#243;n aparece directamente en la &#250;ltima columna sin c&#225;lculos adicionales.</p>
+</div>
+<div class="box bk">
+  <div class="bl">Objetivo: forma escalonada reducida</div>
+  <div style="margin:.5rem 0">${mx([['1','0','0','x'],['0','1','0','y'],['0','0','1','z']],3)}</div>
+  <p style="font-size:12px;color:var(--muted);margin-top:.35rem">Los valores x, y, z son directamente la soluci&#243;n. No hay que despejar nada m&#225;s.</p>
+</div>
+<hr>
+<p style="font-size:14px;font-weight:600;margin-bottom:.65rem">Ejemplo &mdash; asignaci&#243;n de presupuesto entre tres l&#237;neas de negocio</p>
+<div class="eg-box">
+  <strong>Sistema:</strong> x + y + z = 600 &nbsp;&nbsp; x &minus; y = 100 &nbsp;&nbsp; y &minus; z = 50<br><br>
+  <strong>Matriz aumentada:</strong><br>
+  ${mx([['1','1','1','600'],['1','-1','0','100'],['0','1','-1','50']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; &minus; F&#8321;</span></div>
+  ${mx([['1','1','1','600'],['0','-2','-1','-500'],['0','1','-1','50']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; / (&minus;2)</span></div>
+  ${mx([['1','1','1','600'],['0','1','1/2','250'],['0','1','-1','50']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8323; &rarr; F&#8323; &minus; F&#8322;</span></div>
+  ${mx([['1','1','1','600'],['0','1','1/2','250'],['0','0','-3/2','-200']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8323; &rarr; F&#8323; &middot; (&minus;2/3)</span></div>
+  ${mx([['1','1','1','600'],['0','1','1/2','250'],['0','0','1','400/3']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; &minus; (1/2)F&#8323;</span><span class="op-lbl">F&#8321; &rarr; F&#8321; &minus; F&#8323;</span></div>
+  ${mx([['1','1','0','1400/3'],['0','1','0','250/3'],['0','0','1','400/3']],3)}<br><br>
+
+  <div class="op-row"><span class="op-lbl">F&#8321; &rarr; F&#8321; &minus; F&#8322;</span></div>
+  ${mx([['1','0','0','1150/3'],['0','1','0','250/3'],['0','0','1','400/3']],3)}<br><br>
+  <strong>Soluci&#243;n:</strong> x &asymp; 383.3 &nbsp; y &asymp; 83.3 &nbsp; z &asymp; 133.3 &nbsp;(millones COP)
+</div>
+<div class="nota"><strong>&#191;Cu&#225;ndo usar cada m&#233;todo?</strong> Si solo necesitas saber si hay soluci&#243;n &#250;nica, Gauss es m&#225;s r&#225;pido. Si necesitas los valores exactos de todas las variables, Gauss-Jordan los da directamente sin c&#225;lculos adicionales.</div>
+${nb(6)}`;
+
+/* ══ S7 ══ */
+document.getElementById('s7-body').innerHTML=`
+<div class="stag">Secci&#243;n 8</div><div class="stitle">Actividades para clase</div>
+<div class="sdesc">Cuatro casos de negocios para trabajar en grupos. Cada uno integra varios conceptos del curso en situaciones reales.</div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:1.1rem;margin-bottom:.65rem">
+  <p style="font-size:14px;font-weight:600;margin-bottom:.6rem">Grupos de 3 &mdash; 20 minutos</p>
+  <div class="g2">
+    <div style="background:var(--blue-bg);border:1px solid var(--blue-b);border-radius:var(--r);padding:.85rem">
+      <div class="bl" style="color:var(--blue)">Grupo A &mdash; Consolidaci&#243;n de ventas</div>
+      <p style="font-size:12px;line-height:1.75">
+        Ventas Q1: ${mx([['80','60'],['120','90']])} &nbsp; Ventas Q2: ${mx([['95','70'],['110','85']])} <br>(filas = productos, columnas = pa&#237;ses)<br>
+        1. Calcula el acumulado semestral (A + B)<br>
+        2. Proyecta el pr&#243;ximo semestre con +15% (1.15 &middot; resultado)<br>
+        3. ¿Qu&#233; producto y pa&#237;s tuvo mejor desempe&#241;o?<br>
+        4. Calcula A &middot; B. &#191;Tiene sentido econ&#243;mico el resultado?
+      </p>
+    </div>
+    <div style="background:var(--green-bg);border:1px solid var(--green-b);border-radius:var(--r);padding:.85rem">
+      <div class="bl" style="color:var(--green)">Grupo B &mdash; Determinante e inversa</div>
+      <p style="font-size:12px;line-height:1.75">
+        Modelo de costos: A = ${mx([['3','1'],['2','4']])}<br>
+        1. Calcula det(A). &#191;El modelo tiene soluci&#243;n &#250;nica?<br>
+        2. Calcula A<sup>&minus;1</sup> con la f&#243;rmula directa<br>
+        3. Verifica que A &middot; A<sup>&minus;1</sup> = I<br>
+        4. &#191;Qu&#233; significa A<sup>&minus;1</sup> en t&#233;rminos del modelo de costos?
+      </p>
+    </div>
+    <div style="background:var(--yellow-bg);border:1px solid var(--yellow-b);border-radius:var(--r);padding:.85rem">
+      <div class="bl" style="color:var(--yellow)">Grupo C &mdash; Gauss aplicado</div>
+      <p style="font-size:12px;line-height:1.75">
+        Una empresa distribuye $500 millones entre publicidad (x), log&#237;stica (y) y ventas (z):<br>
+        x + y + z = 500<br>
+        x = 2y (publicidad duplica log&#237;stica)<br>
+        z = y + 50 (ventas supera log&#237;stica en 50)<br>
+        1. Escribe la matriz aumentada<br>
+        2. Aplica Gauss hasta la forma escalonada<br>
+        3. Resuelve por sustituci&#243;n regresiva<br>
+        4. Interpreta el resultado
+      </p>
+    </div>
+    <div style="background:var(--red-bg);border:1px solid var(--red-b);border-radius:var(--r);padding:.85rem">
+      <div class="bl" style="color:var(--red)">Grupo D &mdash; Gauss-Jordan aplicado</div>
+      <p style="font-size:12px;line-height:1.75">
+        Tres socios aportan capital para tres proyectos internacionales. El sistema es:<br>
+        x + y + z = 900<br>
+        2x &minus; y = 150<br>
+        y + 2z = 600<br>
+        1. Escribe la matriz aumentada<br>
+        2. Aplica Gauss-Jordan completo<br>
+        3. Lee la soluci&#243;n directamente<br>
+        4. &#191;Qu&#233; tipo de soluci&#243;n es y qu&#233; significa para los socios?
+      </p>
+    </div>
+  </div>
+</div>
+<div class="box bw">
+  <div class="bl">Debate &mdash; 10 minutos</div>
+  <p>El director financiero de una empresa dice: &ldquo;nuestro modelo de distribuci&#243;n de presupuesto tiene determinante cero, por lo tanto no necesitamos resolver nada &mdash; el sistema no tiene soluci&#243;n.&rdquo; &#191;Tiene raz&#243;n? &#191;Qu&#233; le responder&#237;as? &#191;Qu&#233; deber&#237;a hacer la empresa en ese caso?</p>
+</div>
+${nb(7)}`;
+
+/* ══ S8: QUIZ ══ */
+const qdata=[
+  {
+    q:'Una empresa registra ventas de 3 productos en 4 pa&#237;ses. La matriz que organiza estos datos tiene orden:',
+    opts:['4&times;3','3&times;4','4&times;4','3&times;3'],
+    ans:1,
+    exp:'Las filas son los productos (3) y las columnas son los pa&#237;ses (4). El orden es m&times;n = 3&times;4.'
+  },
+  {
+    q:'En la siguiente matriz de ventas, &#191;qu&#233; representa el elemento a<sub>23</sub>?<br>'+mx([['120','85','95'],['60','45','70'],['200','130','180']]),
+    opts:['Ventas del producto 2 en el pa&#237;s 3','Ventas del producto 3 en el pa&#237;s 2','El total de ventas del pa&#237;s 3','Ventas del producto 2 en total'],
+    ans:0,
+    exp:'a<sub>ij</sub> indica fila i (producto 2), columna j (pa&#237;s 3). En este caso a<sub>23</sub> = 70, que representa las ventas del producto 2 en el pa&#237;s 3.'
+  },
+  {
+    q:'Una empresa quiere sumar las matrices de ventas de dos trimestres. &#191;Qu&#233; condici&#243;n deben cumplir?',
+    opts:['Deben ser cuadradas','Deben tener el mismo orden (mismas filas y columnas)','La primera debe tener m&#225;s filas que la segunda','No hay ninguna condici&#243;n'],
+    ans:1,
+    exp:'Solo se pueden sumar matrices del mismo orden. Tiene sentido: solo puedes sumar ventas del mismo producto en el mismo pa&#237;s.'
+  },
+  {
+    q:'El determinante de la siguiente matriz de costos es:<br>'+mx([['4','2'],['1','3']]),
+    opts:['10','14','8','6'],
+    ans:0,
+    exp:'det = 4&middot;3 &minus; 2&middot;1 = 12 &minus; 2 = 10. Diagonal principal menos diagonal secundaria.'
+  },
+  {
+    q:'El modelo financiero de una empresa tiene det(A) = 0. Esto significa que:',
+    opts:['El modelo es perfecto y no necesita ajustes','El modelo no tiene soluci&#243;n &#250;nica &mdash; las restricciones son dependientes o contradictorias','El presupuesto disponible es cero','La empresa no tiene deudas'],
+    ans:1,
+    exp:'det = 0 indica que el sistema no tiene soluci&#243;n &#250;nica. Las ecuaciones del modelo son linealmente dependientes (alguna es redundante) o contradictorias. El modelo debe revisarse.'
+  },
+  {
+    q:'La operaci&#243;n F<sub>2</sub> &rarr; F<sub>2</sub> &minus; 2F<sub>1</sub> en una matriz aumentada de presupuesto significa:',
+    opts:['Duplicar el presupuesto de la segunda restricci&#243;n','Reemplazar la segunda ecuaci&#243;n por (segunda ecuaci&#243;n menos 2 veces la primera)','Intercambiar la primera y segunda ecuaci&#243;n','Eliminar la segunda ecuaci&#243;n del modelo'],
+    ans:1,
+    exp:'F<sub>i</sub> &rarr; F<sub>i</sub> + k&middot;F<sub>j</sub>: nueva fila i = fila i actual + k veces la fila j. Aqu&#237; k = &minus;2 y j = 1. Esta operaci&#243;n no cambia las soluciones del sistema.'
+  },
+  {
+    q:'Al aplicar Gauss a un modelo de distribuci&#243;n de presupuesto aparece la siguiente fila:<br>'+mx([['0','0','50']],2)+'&#191;Qu&#233; indica?',
+    opts:['El presupuesto disponible es 50 millones','Las restricciones del modelo son contradictorias &mdash; no hay soluci&#243;n','Una de las variables vale cero','Hay que seguir operando'],
+    ans:1,
+    exp:'La fila representa 0x + 0y = 50, es decir 0 = 50, que es imposible. Las restricciones del modelo son inconsistentes entre s&#237; y deben revisarse.'
+  },
+  {
+    q:'&#191;Qu&#233; ventaja tiene Gauss-Jordan sobre Gauss para un analista de negocios?',
+    opts:['Es m&#225;s r&#225;pido en todos los casos','Da la soluci&#243;n directamente sin c&#225;lculos adicionales de sustituci&#243;n','Solo funciona con matrices 2&times;2','No requiere operaciones elementales'],
+    ans:1,
+    exp:'Gauss-Jordan lleva la matriz a la forma escalonada reducida donde la soluci&#243;n aparece directamente. Gauss requiere hacer sustituci&#243;n regresiva despu&#233;s, lo cual puede generar errores adicionales.'
+  },
+  {
+    q:'La inversa de la siguiente matriz es:<br>'+mx([['2','1'],['1','1']]),
+    opts:[mx([['1','-1'],['-1','2']]),mx([['-1','1'],['1','-2']]),mx([['1','1'],['1','2']]),mx([['2','-1'],['-1','1']])],
+    ans:0,
+    exp:'det = 2&middot;1 &minus; 1&middot;1 = 1. A<sup>&minus;1</sup> = (1/1)&middot;[1 &minus;1; &minus;1 2] = [1 &minus;1; &minus;1 2]. Verificaci&#243;n: A&middot;A<sup>&minus;1</sup> = I &#10003;'
+  },
+  {
+    q:'Un sistema de distribución de presupuesto tiene una fila [ 0 &nbsp; 0 &nbsp; 0 | 0 ] en su forma escalonada. Esto indica que:',
+    opts:['El presupuesto total es cero','El modelo tiene infinitas distribuciones posibles que cumplen las restricciones','Las restricciones son contradictorias','La soluci&#243;n es &#250;nica'],
+    ans:1,
+    exp:'Una fila de todos ceros (incluyendo el lado derecho) indica que una ecuaci&#243;n es combinaci&#243;n lineal de las otras &mdash; es redundante. Eso genera una variable libre y por tanto infinitas soluciones posibles.'
+  },
+];
+let qsels={},qdone=false;
+function buildQuiz(){
+  qsels={};qdone=false;
+  document.getElementById('s8-body').innerHTML=`
+  <div class="stag">Secci&#243;n 9</div><div class="stitle">Quiz de comprensi&#243;n</div>
+  <div class="sdesc">10 preguntas que cubren todos los temas del curso aplicados a contextos de negocios. Retroalimentaci&#243;n instant&#225;nea en cada respuesta.</div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-n" id="qok">0</div><div class="stat-l">Correctas</div></div>
+    <div class="stat"><div class="stat-n" id="qbad" style="color:var(--red)">0</div><div class="stat-l">Incorrectas</div></div>
+    <div class="stat"><div class="stat-n" id="qleft">10</div><div class="stat-l">Por responder</div></div>
+  </div>
+  <div>${qdata.map((q,i)=>`
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:.9rem;margin-bottom:.55rem">
+      <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:.35rem">Pregunta ${i+1}</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:.6rem;line-height:1.6;color:var(--text)">${q.q}</div>
+      ${q.opts.map((o,j)=>`<button class="qopt" onclick="selQ(${i},${j})" data-qi="${i}" data-oi="${j}"><span class="qltr">${'ABCD'[j]}</span><span>${o}</span></button>`).join('')}
+      <div class="qfb" id="qfb${i}"></div>
+    </div>`).join('')}</div>
+  <div id="qbtns" style="display:flex;gap:.75rem;justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+    <button class="btn btn-g" onclick="goSec(7)">&#8592; Actividades</button>
+    <button class="btn btn-p" onclick="submitQ()">Finalizar y ver puntaje</button>
+  </div>
+  <div class="score-card" id="scard">
+    <div class="score-num" id="snum">0/10</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:.25rem">puntaje final</div>
+    <div style="font-size:15px;font-weight:600;margin-top:.85rem;color:var(--text)" id="smsg"></div>
+    <div style="display:flex;gap:.5rem;justify-content:center;margin-top:1.25rem;flex-wrap:wrap">
+      <button class="btn btn-p" onclick="buildQuiz()">Repetir quiz</button>
+      <button class="btn" onclick="goSec(9)">Ir al simulacro &#8594;</button>
+    </div>
+  </div>`;
+}
+function selQ(qi,oi){
+  if(qdone)return;
+  qsels[qi]=oi;
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.classList.remove('sel'));
+  document.querySelector('[data-qi="'+qi+'"][data-oi="'+oi+'"]').classList.add('sel');
+  const el=document.getElementById('qleft');if(el)el.textContent=qdata.length-Object.keys(qsels).length;
+}
+function submitQ(){
+  qdone=true;let ok=0;
+  qdata.forEach((q,i)=>{
+    const sel=qsels[i];
+    document.querySelectorAll('[data-qi="'+i+'"]').forEach(b=>{
+      const oi=parseInt(b.dataset.oi);
+      b.classList.remove('sel');b.style.pointerEvents='none';
+      if(oi===q.ans)b.classList.add('ok');
+      else if(sel!==undefined&&oi===sel)b.classList.add('bad');
+    });
+    if(sel===q.ans)ok++;
+    const fb=document.getElementById('qfb'+i);
+    fb.className='qfb show '+(sel===q.ans?'ok':'bad');
+    fb.innerHTML=(sel===q.ans?'<strong>Correcto. </strong>':'<strong>Incorrecto. </strong>')+q.exp;
+  });
+  document.getElementById('qok').textContent=ok;
+  document.getElementById('qbad').textContent=qdata.length-ok;
+  document.getElementById('qleft').textContent=0;
+  document.getElementById('snum').textContent=ok+'/'+qdata.length;
+  const msgs=['Repasa los m&#233;todos de Gauss y la interpretaci&#243;n de los tipos de soluci&#243;n.','Buen avance &mdash; revisa los errores antes del parcial.','Muy bien &mdash; dominas el curso.','Excelente &mdash; listo para el parcial.'];
+  document.getElementById('smsg').textContent=msgs[ok<=3?0:ok<=6?1:ok<=8?2:3];
+  document.getElementById('scard').classList.add('show');
+  document.getElementById('qbtns').style.display='none';
+  nav.children[8].classList.add('done');
+}
+buildQuiz();
+
+/* ══ S9: SIMULACRO ══ */
+document.getElementById('s9-body').innerHTML=`
+<div class="stag">Secci&#243;n 10</div><div class="stitle">Simulacro tipo parcial</div>
+<div class="sdesc">5 preguntas como en el parcial real. Resu&#233;lvelas en papel antes de ver la soluci&#243;n. Tiempo sugerido: 90 minutos.</div>
+<div class="parcial-header">
+  <div class="parcial-titulo">Parcial &mdash; &#193;lgebra Lineal &nbsp;&middot;&nbsp; Matem&#225;ticas II</div>
+  <div class="parcial-sub">Negocios Internacionales &nbsp;&middot;&nbsp; 5 preguntas &nbsp;&middot;&nbsp; 100 puntos &nbsp;&middot;&nbsp; 90 minutos</div>
+  <div style="font-size:12px;color:var(--muted);margin-top:.35rem">Docente: Eder Santiago Martelo Gomez &nbsp;&middot;&nbsp; Muestra todo el procedimiento. Respuestas sin justificaci&#243;n no se califican.</div>
+</div>
+
+<div class="pregunta">
+  <div class="preg-head"><div class="preg-num">1</div><div class="preg-titulo">Operaciones con matrices</div><div class="preg-pts">20 pts</div></div>
+  <div class="preg-body">
+    <div class="preg-enun">Una empresa exportadora registra sus ventas trimestrales (millones USD) de dos productos en tres pa&#237;ses:<br><br>
+    Trimestre 1: ${mx([['80','65','90'],['120','95','110']])} &nbsp;&nbsp; Trimestre 2: ${mx([['85','70','95'],['130','100','115']])}
+    <br><br>(Filas = productos, columnas = M&#233;xico, Per&#250;, Chile)</div>
+    <div class="parte">(a) Calcula el acumulado semestral A + B y la diferencia A &minus; B. Interpreta qu&#233; representa cada resultado.</div>
+    <div class="parte">(b) Proyecta el siguiente semestre aplicando un crecimiento del 8% a las ventas acumuladas.</div>
+    <div class="parte">(c) Calcula la transpuesta del acumulado semestral. &#191;Qu&#233; informaci&#243;n diferente muestra?</div>
+    <button class="sol-btn" onclick="this.nextElementSibling.classList.toggle('show');this.textContent=this.nextElementSibling.classList.contains('show')?'Ocultar soluci&#243;n &#8593;':'Ver soluci&#243;n &#8595;'">Ver soluci&#243;n &#8595;</button>
+    <div class="sol-body">
+      <div class="sol-tag">Soluci&#243;n completa</div>
+      <div class="sol-parte"><div class="sol-lbl">(a)</div>
+        A + B = ${mx([['165','135','185'],['250','195','225']])}
+        <p style="font-size:13px;margin-top:.4rem">Representa las ventas totales del semestre. Por ejemplo, el producto 1 vendi&#243; 165 millones en M&#233;xico durante el semestre.</p>
+        A &minus; B = ${mx([['-5','-5','-5'],['-10','-5','-5']])}
+        <p style="font-size:13px;margin-top:.35rem">Todos los valores son negativos: las ventas del Q2 superaron a las del Q1 en todos los mercados &mdash; tendencia positiva.</p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(b) Proyecci&#243;n +8%</div>
+        1.08 &middot; ${mx([['165','135','185'],['250','195','225']])} = ${mx([['178.2','145.8','199.8'],['270','210.6','243']])}
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(c) Transpuesta</div>
+        (A+B)<sup>T</sup> = ${mx([['165','250'],['135','195'],['185','225']])}
+        <p style="font-size:13px;margin-top:.35rem">La transpuesta muestra la informaci&#243;n desde la perspectiva de los pa&#237;ses: cada fila es un pa&#237;s y cada columna es un producto. Permite analizar el desempe&#241;o por mercado en lugar de por producto.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pregunta">
+  <div class="preg-head"><div class="preg-num">2</div><div class="preg-titulo">Determinantes y matriz inversa</div><div class="preg-pts">20 pts</div></div>
+  <div class="preg-body">
+    <div class="preg-enun">Una empresa modela la relaci&#243;n entre sus dos l&#237;neas de negocio con la siguiente matriz de coeficientes:<br><br>
+    A = ${mx([['5','3'],['2','4']])} &nbsp;&nbsp;&nbsp; B = ${mx([['1','2','0'],['3','1','2'],['0','2','1']])}
+    </div>
+    <div class="parte">(a) Calcula det(A). ¿El modelo de dos l&#237;neas tiene soluci&#243;n &#250;nica? Halla A<sup>&minus;1</sup> y verifica.</div>
+    <div class="parte">(b) Calcula det(B) usando la Regla de Sarrus. &#191;Existe B<sup>&minus;1</sup>?</div>
+    <div class="parte">(c) Interpreta en lenguaje de negocios qu&#233; significa que det(A) &ne; 0 y que existe A<sup>&minus;1</sup>.</div>
+    <button class="sol-btn" onclick="this.nextElementSibling.classList.toggle('show');this.textContent=this.nextElementSibling.classList.contains('show')?'Ocultar soluci&#243;n &#8593;':'Ver soluci&#243;n &#8595;'">Ver soluci&#243;n &#8595;</button>
+    <div class="sol-body">
+      <div class="sol-tag">Soluci&#243;n completa</div>
+      <div class="sol-parte"><div class="sol-lbl">(a)</div>
+        <p style="font-size:13px;line-height:1.9">
+          det(A) = 5&middot;4 &minus; 3&middot;2 = 20 &minus; 6 = <strong>14</strong> &rarr; soluci&#243;n &#250;nica, existe A<sup>&minus;1</sup><br><br>
+          A<sup>&minus;1</sup> = (1/14) &middot; ${mx([['4','&minus;3'],['&minus;2','5']])} = ${mx([['4/14','&minus;3/14'],['&minus;2/14','5/14']])}
+        </p>
+        <p style="font-size:13px;margin-top:.35rem"><strong>Verificaci&#243;n:</strong> A&middot;A<sup>&minus;1</sup> = ${mx([['5','3'],['2','4']])} &middot; ${mx([['4/14','&minus;3/14'],['&minus;2/14','5/14']])} = ${mx([['1','0'],['0','1']])} &#10003;</p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(b) Sarrus</div>
+        <p style="font-size:13px;line-height:1.9">
+          Principales: 1&middot;1&middot;1 + 2&middot;2&middot;0 + 0&middot;3&middot;2 = 1 + 0 + 0 = 1<br>
+          Secundarias: 0&middot;1&middot;0 + 1&middot;2&middot;2 + 2&middot;3&middot;1 = 0 + 4 + 6 = 10<br>
+          det(B) = 1 &minus; 10 = <strong>&minus;9</strong> &rarr; det &ne; 0, <strong>s&#237; existe B<sup>&minus;1</sup></strong>
+        </p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(c) Interpretaci&#243;n</div>
+        <p style="font-size:13px;line-height:1.75">det(A) &ne; 0 significa que las dos l&#237;neas de negocio son <strong>independientes entre s&#237;</strong> &mdash; ninguna es simple combinaci&#243;n de la otra. La existencia de A<sup>&minus;1</sup> significa que el modelo es <strong>reversible</strong>: si conocemos los resultados, podemos recuperar las condiciones originales que los produjeron.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pregunta">
+  <div class="preg-head"><div class="preg-num">3</div><div class="preg-titulo">M&#233;todo de Gauss &mdash; Distribuci&#243;n de presupuesto</div><div class="preg-pts">20 pts</div></div>
+  <div class="preg-body">
+    <div class="preg-enun">Una empresa tiene $600 millones para distribuir entre sus tres &#225;reas de negocio internacional: exportaciones (x), importaciones (y) y log&#237;stica (z). Las condiciones son:<br><br>
+    x + y + z = 600 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (total disponible)<br>
+    2x &minus; y &minus; z = 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(exportaciones = suma de las otras dos &#225;reas)<br>
+    x + y &minus; 2z = 100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(restricci&#243;n de equilibrio regional)</div>
+    <div class="parte">(a) Escribe la matriz aumentada del sistema.</div>
+    <div class="parte">(b) Aplica el m&#233;todo de Gauss hasta la forma escalonada. Indica cada operaci&#243;n.</div>
+    <div class="parte">(c) Resuelve por sustituci&#243;n regresiva.</div>
+    <div class="parte">(d) Interpreta: &#191;cu&#225;nto corresponde a cada &#225;rea? &#191;Es razonable la distribuci&#243;n?</div>
+    <button class="sol-btn" onclick="this.nextElementSibling.classList.toggle('show');this.textContent=this.nextElementSibling.classList.contains('show')?'Ocultar soluci&#243;n &#8593;':'Ver soluci&#243;n &#8595;'">Ver soluci&#243;n &#8595;</button>
+    <div class="sol-body">
+      <div class="sol-tag">Soluci&#243;n completa</div>
+      <div class="sol-parte"><div class="sol-lbl">(a)</div>
+        ${mx([['1','1','1','600'],['2','-1','-1','0'],['1','1','-2','100']],3)}
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(b) Eliminaci&#243;n gaussiana</div>
+        <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; &minus; 2F&#8321;</span><span class="op-lbl">F&#8323; &rarr; F&#8323; &minus; F&#8321;</span></div>
+        ${mx([['1','1','1','600'],['0','-3','-3','-1200'],['0','0','-3','-500']],3)}<br>
+        <span style="font-size:12px;color:var(--green)">&#10003; Forma escalonada</span>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(c) Sustituci&#243;n regresiva</div>
+        <p style="font-size:13px;line-height:1.9">
+          &minus;3z = &minus;500 &rarr; <strong>z = 166.7 millones</strong> (log&#237;stica)<br>
+          &minus;3y &minus; 3(166.7) = &minus;1200 &rarr; &minus;3y = &minus;700 &rarr; <strong>y = 233.3 millones</strong> (importaciones)<br>
+          x + 233.3 + 166.7 = 600 &rarr; <strong>x = 200 millones</strong> (exportaciones)
+        </p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(d) Interpretaci&#243;n</div>
+        <p style="font-size:13px;line-height:1.75">Exportaciones recibe $200M (33%), importaciones $233.3M (39%) y log&#237;stica $166.7M (28%). La condici&#243;n x = y + z se cumple: 200 = 233.3 + 166.7 &mdash; las exportaciones reciben exactamente lo mismo que las otras dos &#225;reas combinadas. La distribuci&#243;n es razonable para una empresa enfocada en importaciones.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pregunta">
+  <div class="preg-head"><div class="preg-num">4</div><div class="preg-titulo">Gauss-Jordan &mdash; Mezcla de productos para exportaci&#243;n</div><div class="preg-pts">20 pts</div></div>
+  <div class="preg-body">
+    <div class="preg-enun">Una empresa exporta tres productos: caf&#233; (x), flores (y) y textiles (z), en toneladas. Las restricciones de log&#237;stica, presupuesto y cuotas de mercado son:<br><br>
+    x + y + z = 500 &nbsp;&nbsp; (capacidad total de carga)<br>
+    2x + y = 600 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (restricci&#243;n de presupuesto de empaque)<br>
+    y + 2z = 400 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (cuota de mercado combinada)</div>
+    <div class="parte">(a) Escribe la matriz aumentada.</div>
+    <div class="parte">(b) Aplica Gauss-Jordan completo indicando cada operaci&#243;n.</div>
+    <div class="parte">(c) Lee la soluci&#243;n directamente. &#191;Qu&#233; tipo de soluci&#243;n es?</div>
+    <div class="parte">(d) Interpreta: &#191;cu&#225;ntas toneladas de cada producto se exportan?</div>
+    <button class="sol-btn" onclick="this.nextElementSibling.classList.toggle('show');this.textContent=this.nextElementSibling.classList.contains('show')?'Ocultar soluci&#243;n &#8593;':'Ver soluci&#243;n &#8595;'">Ver soluci&#243;n &#8595;</button>
+    <div class="sol-body">
+      <div class="sol-tag">Soluci&#243;n completa</div>
+      <div class="sol-parte"><div class="sol-lbl">(a)</div>
+        ${mx([['1','1','1','500'],['2','1','0','600'],['0','1','2','400']],3)}
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(b) Gauss-Jordan</div>
+        <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; &minus; 2F&#8321;</span></div>
+        ${mx([['1','1','1','500'],['0','-1','-2','-400'],['0','1','2','400']],3)}<br>
+        <div class="op-row"><span class="op-lbl">F&#8323; &rarr; F&#8323; + F&#8322;</span></div>
+        ${mx([['1','1','1','500'],['0','-1','-2','-400'],['0','0','0','0']],3)}<br>
+        <span style="font-size:12px;color:var(--yellow)">Fila de ceros &rarr; variable libre</span><br><br>
+        <div class="op-row"><span class="op-lbl">F&#8322; &rarr; &minus;F&#8322;</span></div>
+        ${mx([['1','1','1','500'],['0','1','2','400'],['0','0','0','0']],3)}<br>
+        <div class="op-row"><span class="op-lbl">F&#8321; &rarr; F&#8321; &minus; F&#8322;</span></div>
+        ${mx([['1','0','-1','100'],['0','1','2','400'],['0','0','0','0']],3)}
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(c) Soluci&#243;n</div>
+        <p style="font-size:13px;line-height:1.75">El sistema tiene <strong>infinitas soluciones</strong> (variable libre z = t). La soluci&#243;n general es:<br>
+        x = 100 + t &nbsp;&nbsp; y = 400 &minus; 2t &nbsp;&nbsp; z = t &nbsp;&nbsp; (donde t puede ser cualquier valor v&#225;lido)<br><br>
+        Para que tenga sentido f&#237;sico: t &ge; 0, 400 &minus; 2t &ge; 0 &rarr; 0 &le; t &le; 200</p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(d) Interpretaci&#243;n</div>
+        <p style="font-size:13px;line-height:1.75">No hay una &#250;nica combinaci&#243;n &mdash; la empresa tiene flexibilidad para variar la cantidad de textiles entre 0 y 200 toneladas. Por ejemplo, con t = 100: caf&#233; = 200 ton, flores = 200 ton, textiles = 100 ton. La gerencia puede elegir la mezcla que maximice las ganancias dentro del rango v&#225;lido.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pregunta">
+  <div class="preg-head"><div class="preg-num">5</div><div class="preg-titulo">Problema integrador &mdash; An&#225;lisis completo</div><div class="preg-pts">20 pts</div></div>
+  <div class="preg-body">
+    <div class="preg-enun">Tres socios fundan una empresa de comercio internacional y acuerdan que:<br><br>
+    &bull; Entre los tres aportan $900 millones en total<br>
+    &bull; El socio A aporta el doble que el socio B<br>
+    &bull; El socio B aporta $50 millones m&#225;s que el socio C<br><br>
+    Sea x = aporte del socio A, y = aporte del socio B, z = aporte del socio C.</div>
+    <div class="parte">(a) Plantea el sistema de ecuaciones y escribe la matriz aumentada.</div>
+    <div class="parte">(b) Calcula det(A) para verificar si hay soluci&#243;n &#250;nica antes de resolver.</div>
+    <div class="parte">(c) Resuelve por el m&#233;todo que prefieras (Gauss o Gauss-Jordan). Indica cu&#225;l usas.</div>
+    <div class="parte">(d) &#191;Cu&#225;nto aporta cada socio? &#191;Es una distribuci&#243;n equitativa? Justifica.</div>
+    <button class="sol-btn" onclick="this.nextElementSibling.classList.toggle('show');this.textContent=this.nextElementSibling.classList.contains('show')?'Ocultar soluci&#243;n &#8593;':'Ver soluci&#243;n &#8595;'">Ver soluci&#243;n &#8595;</button>
+    <div class="sol-body">
+      <div class="sol-tag">Soluci&#243;n completa</div>
+      <div class="sol-parte"><div class="sol-lbl">(a) Sistema y matriz aumentada</div>
+        <div class="formula" style="font-size:12px">x + y + z = 900 &nbsp;(total)<br>x &minus; 2y = 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(A aporta el doble que B)<br>y &minus; z = 50 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(B aporta 50 m&#225;s que C)</div>
+        ${mx([['1','1','1','900'],['1','-2','0','0'],['0','1','-1','50']],3)}
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(b) Determinante por Sarrus</div>
+        <p style="font-size:13px;line-height:1.9">
+          Principales: 1(&minus;2)(&minus;1) + 1(0)(0) + 1(1)(1) = 2 + 0 + 1 = 3<br>
+          Secundarias: 1(&minus;2)(0) + 1(0)(1) + 1(1)(&minus;1) = 0 + 0 &minus; 1 = &minus;1<br>
+          det = 3 &minus; (&minus;1) = <strong>4 &ne; 0 &rarr; soluci&#243;n &#250;nica garantizada</strong>
+        </p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(c) M&#233;todo de Gauss</div>
+        <div class="op-row"><span class="op-lbl">F&#8322; &rarr; F&#8322; &minus; F&#8321;</span></div>
+        ${mx([['1','1','1','900'],['0','-3','-1','-900'],['0','1','-1','50']],3)}<br>
+        <div class="op-row"><span class="op-lbl">F&#8323; &rarr; 3F&#8323; + F&#8322;</span></div>
+        ${mx([['1','1','1','900'],['0','-3','-1','-900'],['0','0','-4','-750']],3)}<br>
+        <p style="font-size:13px;margin-top:.5rem;line-height:1.9">
+          &minus;4z = &minus;750 &rarr; <strong>z = 187.5 millones</strong> (socio C)<br>
+          &minus;3y &minus; 187.5 = &minus;900 &rarr; &minus;3y = &minus;712.5 &rarr; <strong>y = 237.5 millones</strong> (socio B)<br>
+          x + 237.5 + 187.5 = 900 &rarr; <strong>x = 475 millones</strong> (socio A)
+        </p>
+      </div>
+      <div class="sol-parte"><div class="sol-lbl">(d) Interpretaci&#243;n</div>
+        <p style="font-size:13px;line-height:1.75">
+          Socio A aporta <strong>$475 millones</strong> (52.8%), Socio B <strong>$237.5 millones</strong> (26.4%) y Socio C <strong>$187.5 millones</strong> (20.8%).<br><br>
+          <strong>Verificaci&#243;n:</strong> 475 = 2&times;237.5 &#10003; &nbsp;&nbsp; 237.5 = 187.5 + 50 &#10003;<br><br>
+          No es una distribuci&#243;n equitativa en partes iguales, pero s&#237; cumple exactamente lo acordado por los socios. El socio A asume m&#225;s de la mitad del riesgo y, en consecuencia, normalmente tendr&#237;a mayor participaci&#243;n en las utilidades.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="nav-btns">
+  <button class="btn btn-g" onclick="goSec(8)">&#8592; Quiz</button>
+  <button class="btn btn-p" onclick="goSec(0)">Volver al inicio</button>
+</div>`;
+</script>
+</body>
+</html>
